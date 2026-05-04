@@ -66,8 +66,124 @@
         .mobile-menu-btn { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; }
         .mobile-menu-btn span { width: 25px; height: 2px; background: var(--dark-brown); transition: var(--transition); }
 
-        .hero { margin-top: 120px; height: calc(100vh - 120px); min-height: 700px; background: linear-gradient(135deg, rgba(44, 24, 16, 0.85) 0%, rgba(74, 55, 40, 0.75) 100%), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; background-attachment: fixed; display: flex; align-items: center; position: relative; overflow: hidden; }
-        .hero-content { position: relative; z-index: 2; max-width: 800px; color: var(--white); }
+        /* ============ HERO SECTION WITH SLIDING BACKGROUND ============ */
+       
+.hero { 
+    margin-top: 120px; 
+    height: calc(100vh - 120px); 
+    min-height: 700px; 
+    position: relative; 
+    overflow: hidden; 
+    display: flex; 
+    align-items: center; 
+}
+
+/* Background Image Slider - FIXED */
+.hero-bg-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    /* Smooth horizontal slide - no gaps */
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+    will-change: transform;
+}
+
+.hero-bg-slide {
+    min-width: 100%;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* No flex shrink = no gaps between slides */
+    flex-shrink: 0;
+    /* Smooth fade for opacity changes */
+    transition: opacity 0.8s ease;
+    opacity: 0;
+    position: relative;
+}
+
+/* Only the active slide is visible */
+.hero-bg-slide.active {
+    opacity: 1;
+    /* ❌ REMOVED: animation: slideRight - this was causing gaps */
+}
+
+/* Dark overlay for text readability */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(44, 24, 16, 0.85) 0%, rgba(74, 55, 40, 0.75) 100%);
+    z-index: 1;
+}
+
+.hero-content { position: relative; z-index: 2; color: var(--white); max-width: 800px; }
+
+/* Slider Controls */
+.hero-slider-controls {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 3;
+}
+
+.slider-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(201, 169, 97, 0.3);
+    border: 2px solid var(--accent-gold);
+    color: var(--white);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.slider-btn:hover {
+    background: var(--accent-gold);
+    color: var(--dark-brown);
+    transform: scale(1.1);
+}
+
+.slider-dots { display: flex; gap: 10px; }
+
+.slider-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    border: 2px solid var(--accent-gold);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.slider-dot.active {
+    background: var(--accent-gold);
+    transform: scale(1.2);
+}
+
+/* Hide controls on mobile */
+@media (max-width: 768px) {
+    .hero-slider-controls { display: none; }
+}
+
+        /* ============ END HERO SLIDER STYLES ============ */
+
+        .hero-content { position: relative; z-index: 2; max-width: 800px; }
         .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(201, 169, 97, 0.2); border: 1px solid var(--accent-gold); padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; margin-bottom: 24px; color: var(--accent-gold); font-weight: 500; }
         .hero h2 { font-size: 4rem; margin-bottom: 24px; font-weight: 700; opacity: 0; animation: fadeInUp 1s ease forwards; }
         .hero h2 span { color: var(--accent-gold); display: block; }
@@ -318,7 +434,22 @@
         </div>
     </header>
 
+    <!-- ============ HERO SECTION WITH SLIDING BACKGROUND ============ -->
     <section class="hero" id="home">
+        <!-- 🔹🔹🔹 ADD YOUR IMAGES HERE - Replace the URL values below 🔹🔹🔹 -->
+        <div class="hero-bg-slider">
+            <div class="hero-bg-slide active" style="background-image: url(1.jfif);"></div>
+            <div class="hero-bg-slide" style="background-image: url(2.jfif);"></div>
+            <div class="hero-bg-slide" style="background-image: url(3.jfif);"></div>
+            <div class="hero-bg-slide" style="background-image: url(4.jfif);"></div>
+            <!-- ✅ To add more slides, copy the line above and change the URL -->
+            <!-- Example: <div class="hero-bg-slide" style="background-image: url('images/your-photo.jpg');"></div> -->
+        </div>
+        
+        <!-- Dark Overlay (keeps text readable) -->
+        <div class="hero-overlay"></div>
+        
+        <!-- Hero Content -->
         <div class="container">
             <div class="hero-content">
                 <div class="hero-badge"><i class="fas fa-award"></i> Award-Winning Educational Institution</div>
@@ -329,13 +460,17 @@
                     <a href="#ms-classes" class="btn-secondary"><i class="fas fa-users"></i> View Classes</a>
                 </div>
             </div>
-            <div class="hero-stats">
-                <div class="hero-stat"><h3>25+</h3><p>Years of Excellence</p></div>
-                <div class="hero-stat"><h3>98%</h3><p>University Acceptance</p></div>
-                <div class="hero-stat"><h3>50+</h3><p>Expert Faculty</p></div>
-            </div>
+            
+        </div>
+        
+        <!-- Slider Controls (Optional) -->
+        <div class="hero-slider-controls">
+            <button class="slider-btn prev-btn" onclick="moveSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+            <div class="slider-dots" id="sliderDots"></div>
+            <button class="slider-btn next-btn" onclick="moveSlide(1)"><i class="fas fa-chevron-right"></i></button>
         </div>
     </section>
+    <!-- ============ END HERO SECTION ============ -->
 
     <section class="about" id="about">
         <div class="container">
@@ -870,7 +1005,81 @@
                 if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); document.getElementById('navLinks').classList.remove('active'); }
             });
         });
+
+        /* ============ HERO SLIDER FUNCTIONALITY ============ */
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-bg-slide');
+        const sliderTrack = document.querySelector('.hero-bg-slider');
+        const dotsContainer = document.getElementById('sliderDots');
+        const SLIDE_INTERVAL = 2000; // 🔹 Change this value to adjust timing (2000ms = 2 seconds)
+
+        // Create navigation dots
+        function createDots() {
+            slides.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('slider-dot');
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(index));
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        // Update slider position and active states
+        function updateSlider() {
+            // Slide to the right effect
+            sliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update slide opacity
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+            
+            // Update dots
+            document.querySelectorAll('.slider-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        // Go to specific slide
+        function goToSlide(index) {
+            currentSlide = index;
+            if (currentSlide >= slides.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = slides.length - 1;
+            updateSlider();
+            resetAutoSlide();
+        }
+
+        // Move slide forward/backward
+        function moveSlide(direction) {
+            goToSlide(currentSlide + direction);
+        }
+
+        // Auto-slide functionality
+        let autoSlideInterval;
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+                goToSlide(currentSlide + 1);
+            }, SLIDE_INTERVAL);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            startAutoSlide();
+        }
+
+        // Initialize slider when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            if (slides.length > 0) {
+                createDots();
+                updateSlider();
+                startAutoSlide();
+                
+                // Pause on hover
+                const hero = document.querySelector('.hero');
+                hero.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+                hero.addEventListener('mouseleave', startAutoSlide);
+            }
+        });
     </script>
 </body>
 </html>
-
